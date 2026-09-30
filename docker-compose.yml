@@ -1,0 +1,19 @@
+services:
+
+  postgres:
+    image: postgres:18
+
+    environment:
+      POSTGRES_DB: bi_dashboard
+      POSTGRES_USER: bi
+      POSTGRES_PASSWORD: bi
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+volumes:
+  pgdata:
