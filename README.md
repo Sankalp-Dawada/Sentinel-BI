@@ -27,9 +27,24 @@ We use a normalized relational model optimized for temporal queries.
 | `customers` | Entity Management | Segment tagging for enterprise analytics |
 | `transactions` | Financial Ledger | Indexed `occurred_at` for high-speed time-series retrieval |
 
----
+## 🗂️ Project Structure
 
-## 📈 Executive Metrics
+```text
+corporate-kpi-bi-dashboard/
+├── client/              # Vite + React Frontend
+│   ├── src/
+│   │   ├── components/  # Reusable dashboard UI units
+│   │   └── lib/         # API integration & types
+├── server/              # Node.js + Express Backend
+│   ├── src/
+│   │   ├── app.ts       # API definitions & routes
+│   │   ├── db.ts        # Database connection pool
+│   │   └── kpi.ts       # Business logic & formulas
+│   └── test/            # Integration & unit test suites
+├── db/                  # SQL initialization scripts
+└── assets/              # Project diagrams & visuals
+```
+
 
 Sentinel BI transforms raw logs into high-level business intelligence:
 1. **Revenue Velocity:** Hourly throughput tracking.
