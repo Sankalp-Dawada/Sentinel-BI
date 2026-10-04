@@ -1,129 +1,93 @@
-# 📊 Corporate KPI Business Intelligence (BI) Dashboard
+# 📊 Sentinel BI: Executive KPI Dashboard
 
-A real-time Executive Business Intelligence dashboard engineered for tracking critical Key Performance Indicators (KPIs), transactional velocity, and segment distributions in corporate management.
-
----
-
-## 🎯 Use Case & Purpose
-
-In corporate management, executives and operations leads require real-time visibility into financial health, order volume, and customer activity. This dashboard provides:
-
-1. **Real-Time Financial Telemetry:** Instant tracking of gross revenue, order volume, Average Order Value (AOV), and customer engagement without manual reporting delays.
-2. **Revenue Velocity & Hourly Throughput Analysis:** Visualizing revenue trends across time slices to detect traffic surges, operational bottlenecks, or sales dips.
-3. **Market Segment Distribution:** Analyzing customer tiers (*Enterprise*, *Mid-Market*, *SMB*) to guide high-value account retention and resource allocation.
-4. **Live Transaction Streaming:** Utilizing **Server-Sent Events (SSE)** to stream and broadcast transaction updates directly from the database to active management clients.
+Sentinel BI is a high-performance, real-time Business Intelligence platform engineered for enterprise leaders to monitor financial health, transactional velocity, and operational telemetry. Built with a "command-center" aesthetic, it bridges the gap between raw PostgreSQL data and executive decision-making.
 
 ---
 
-## 🏗️ System Architecture
+## 🏛️ System Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Vite + React Client                  │
-│       (Dark Glassmorphic UI, Recharts, Lucide Icons)    │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                  HTTP REST / SSE Stream
-                             │
-┌────────────────────────────▼────────────────────────────┐
-│                  Node.js / Express API                  │
-│        (TypeScript, Vitest, Zod Validation, SSE)        │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                      SQL Connection
-                             │
-┌────────────────────────────▼────────────────────────────┐
-│                 PostgreSQL 16 Engine                    │
-│      (Customers, Transactions, Temporal Indexes)        │
-└─────────────────────────────────────────────────────────┘
-```
+The Sentinel BI platform utilizes a reactive, decoupled architecture designed for high-frequency data updates without polling overhead.
+
+### Architectural Breakdown
+- **Telemetry Ingestion:** Real-time stream processing of transaction events into a PostgreSQL 16 time-series ready schema.
+- **Backend Core:** A Node.js API server leveraging Express, Zod for schema enforcement, and **Server-Sent Events (SSE)** for push-based updates.
+- **Client Interface:** A reactive, glassmorphic React dashboard built with **Vite** and **Recharts**, delivering high-fidelity data visualizations.
+
+**Visual Representation:**
+*   **Data Tier:** PostgreSQL persistent storage with optimized indexing on `occurred_at`.
+*   **Application Tier:** Express middleware handling RESTful resource requests and maintaining persistent SSE connections.
+*   **Client Tier:** SPA rendering engine that subscribes to the event stream, enabling "zero-refresh" live dashboard updates.
 
 ---
 
 ## 🗄️ Database & Data Model
 
-The application runs on **PostgreSQL 16** with indexed relational tables:
+We use a normalized relational model optimized for temporal queries.
 
-### 1. `customers` Table
-Represents enterprise clients and corporate accounts categorized by business segment.
-
-| Column | Type | Description |
+| Table | Primary Purpose | Key Features |
 | :--- | :--- | :--- |
-| `id` | `SERIAL PRIMARY KEY` | Unique customer ID |
-| `name` | `TEXT NOT NULL` | Corporate account name (e.g., *Acme Corp*, *Northstar Ltd*, *Vertex Labs*) |
-| `segment` | `TEXT NOT NULL` | Market category (`Enterprise`, `Mid-Market`, `SMB`) |
-| `created_at` | `TIMESTAMPTZ` | Account onboarding timestamp |
-
-### 2. `transactions` Table
-Stores chronological financial events and order processing logs.
-
-| Column | Type | Description |
-| :--- | :--- | :--- |
-| `id` | `BIGSERIAL PRIMARY KEY` | Unique transaction ID |
-| `customer_id` | `INTEGER REFERENCES customers(id)` | Foreign key referencing the corporate customer |
-| `amount` | `NUMERIC(14,2) NOT NULL` | Transaction total in INR (`₹`) |
-| `status` | `TEXT NOT NULL` | Transaction state (`completed`, `refunded`, `pending`) |
-| `occurred_at` | `TIMESTAMPTZ` | Timestamp of transaction |
+| `customers` | Entity Management | Segment tagging for enterprise analytics |
+| `transactions` | Financial Ledger | Indexed `occurred_at` for high-speed time-series retrieval |
 
 ---
 
-## 📈 Key Performance Indicators (KPIs)
+## 📈 Executive Metrics
 
-- **Total Revenue (₹):** Aggregate sum of all completed transactions within the selected window.
-- **Order Volume:** Total number of successful orders processed.
-- **Average Order Value (AOV):** Calculated as `Total Revenue ÷ Total Orders`.
-- **Active Customers:** Count of unique customers who completed at least one transaction in the current period.
-- **Trajectory & Change Percentage:** Automatic computation comparing current metrics with the preceding equivalent time slice.
+Sentinel BI transforms raw logs into high-level business intelligence:
+1.  **Revenue Velocity:** Hourly throughput tracking.
+2.  **Order Throughput:** Real-time transaction count.
+3.  **Customer Acquisition:** Growth in unique active account metrics.
+4.  **Market Segmentation:** Live revenue share breakdown by account tier.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- **Node.js**: v18+ (tested on Node v20/v24)
-- **PostgreSQL 16** (or Podman / Docker container runtime)
+- Node.js v18+
+- PostgreSQL 16
+- Podman or Docker (for containerized DB)
 
-### 1. Database Setup
-Start the PostgreSQL database:
+### Quick Start
 ```bash
-# Using Docker or Podman Compose
+# 1. Start the Database
 podman compose up -d
-# or
-docker compose up -d
-```
 
-### 2. Install Dependencies
-```bash
+# 2. Install Dependencies
 npm install
 npm install --prefix server
 npm install --prefix client
-```
 
-### 3. Run the Application
-Run both backend API and frontend Vite server concurrently with a single command:
-```bash
+# 3. Launch the Platform
 npm run dev:all
 ```
 
-- **Frontend Client:** [http://localhost:5173](http://localhost:5173) (or `http://localhost:5174`)
-- **Backend API:** `http://localhost:4000`
-
 ---
 
-## 🧪 Testing
+## 📜 License
 
-Run the automated backend test suite (unit and integration tests with Vitest):
-```bash
-npm test --prefix server
+This project is licensed under the **MIT License**.
+
+```text
+MIT License
+
+Copyright (c) 2026 Sentinel BI Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
-
----
-
-## ⚡ API Reference
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/health` | Service health status check |
-| `GET` | `/api/dashboard?from=&to=` | Fetch aggregated KPI figures, hourly trends, and segment breakdowns |
-| `POST` | `/api/transactions` | Ingest a new transaction and broadcast a real-time SSE refresh |
-| `GET` | `/api/events` | Server-Sent Events (SSE) telemetry connection for real-time dashboard updates |
