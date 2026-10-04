@@ -36,7 +36,14 @@ function broadcastRefresh() {
 
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN?.split(",") ?? ["https://sentinel-bi.onrender.com", "https://sankalp-dawada.github.io/Sentinel-BI/"],
+    origin: (origin, callback) => {
+      const allowedOrigins = process.env.CLIENT_ORIGIN?.split(",") ?? ["https://sentinel-bi.onrender.com", "https://sankalp-dawada.github.io/Sentinel-BI/"];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   })
 );
