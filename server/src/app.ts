@@ -36,9 +36,7 @@ function broadcastRefresh() {
 
 app.use(
   cors({
-    origin:
-      process.env.CLIENT_ORIGIN?.split(",")
-      ?? "*"
+    origin: process.env.CLIENT_ORIGIN?.split(",") ?? ["https://sentinel-bi.onrender.com", "https://sankalp-dawada.github.io/Sentinel-BI/"]
   })
 );
 

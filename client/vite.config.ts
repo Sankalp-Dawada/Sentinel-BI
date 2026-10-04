@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'https://sentinel-bi.onrender.com',
         changeOrigin: true,
       },
     },
