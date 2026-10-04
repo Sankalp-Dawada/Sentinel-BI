@@ -58,7 +58,7 @@ export async function fetchDashboard(
 
   const response =
     await fetch(
-      `/api/dashboard?${params}`
+      `https://sentinel-bi.onrender.com/api/dashboard?${params}`
     );
 
   if (!response.ok) {

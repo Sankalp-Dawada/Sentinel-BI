@@ -46,7 +46,7 @@ export default function App() {
 
   useEffect(() => {
     load();
-    const source = new EventSource("/api/events");
+    const source = new EventSource("https://sentinel-bi.onrender.com/api/events");
 
     source.addEventListener("connected", () => {
       setLive(true);
@@ -85,7 +85,7 @@ export default function App() {
       const randomCust = customerIds[Math.floor(Math.random() * customerIds.length)];
       const randomAmount = Math.floor(Math.random() * 18000) + 2000;
 
-      const res = await fetch("/api/transactions", {
+      const res = await fetch("https://sentinel-bi.onrender.com/api/transactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
