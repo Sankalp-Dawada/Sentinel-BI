@@ -1,19 +1,17 @@
+version: "3.9"
 services:
-
-  postgres:
-    image: postgres:18
-
+  db:
+    image: postgres:16-alpine
+    container_name: bi_dashboard_db
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: bi_dashboard
       POSTGRES_USER: bi
       POSTGRES_PASSWORD: bi
-
+      POSTGRES_DB: bi_dashboard
     ports:
       - "5432:5432"
-
     volumes:
-      - pgdata:/var/lib/postgresql
+      - pgdata:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
-
 volumes:
   pgdata:
